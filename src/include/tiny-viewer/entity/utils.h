@@ -34,7 +34,7 @@
 
 #ifndef TINY_VIEWER_UTILS_H
 #define TINY_VIEWER_UTILS_H
-
+#include <optional>
 #include "pcl/visualization/pcl_visualizer.h"
 #include "cereal/cereal.hpp"
 #include "cereal/types/vector.hpp"
