@@ -51,6 +51,7 @@ const std::string default_model_shader = R"Shader(
     uniform mat4 T_cam_norm;
     uniform mat4 KT_cw;
     attribute vec3 vertex;
+    attribute vec2 uv;
 
 #if SHOW_COLOR
     attribute vec4 color;
@@ -62,8 +63,7 @@ const std::string default_model_shader = R"Shader(
     varying vec3 vNormal;
     void main() {
         vNormal = mat3(T_cam_norm) * normal;
-#elif SHOW_TEXTURE
-    attribute vec2 uv;
+#elif SHOW_TEXTURE  
     varying vec2 vUV;
     void main() {
         vUV = uv;
@@ -73,7 +73,6 @@ const std::string default_model_shader = R"Shader(
     void main() {
         vNormalCam = mat3(T_cam_norm) * normal;
 #elif SHOW_UV
-    attribute vec2 uv;
     varying vec2 vUV;
     void main() {
         vUV = uv;

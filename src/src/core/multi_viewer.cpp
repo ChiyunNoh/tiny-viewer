@@ -223,6 +223,7 @@ void MultiViewer::Run() {
     std::map<std::string, std::map<std::size_t, std::vector<std::shared_ptr<GlGeomRenderable>>>>
         renderables;
 
+
     const std::string ModeNames[] = {"SHOW_UV",     "SHOW_TEXTURE", "SHOW_COLOR",
                                      "SHOW_NORMAL", "SHOW_MATCAP",  "SHOW_VERTEX"};
     pangolin::GlSlProgram defProg;
@@ -249,45 +250,46 @@ void MultiViewer::Run() {
         // -------
         // drawing
         // -------
-        {
-            LOCKER_MULTI_VIEWER
-            for (const auto &[name, entities] : _entities) {
-                d_cam.at(name).Activate(_camView.at(name));
-                for (const auto &[id, entity] : entities) {
-                    entity->Draw();
-                }
-            }
-            for (const auto &[name, item] : _geometries) {
-                d_cam.at(name).Activate(_camView.at(name));
-                for (const auto &[id, geo] : item) {
-                    auto aabb = pangolin::GetAxisAlignedBox(geo);
-                    totalAABBs[name][id].extend(aabb);
-                    auto renderable =
-                        std::make_shared<GlGeomRenderable>(pangolin::ToGlGeometry(geo), aabb);
-                    renderables[name][id].push_back(renderable);
-                    RenderNode::Edge edge = {
-                        std::make_shared<SpinTransform>(pangolin::AxisDirection::AxisNone),
-                        {renderable, {}}};
-                    roots[name][id].edges.emplace_back(std::move(edge));
+        // {
+        //     LOCKER_MULTI_VIEWER
+        //     for (const auto &[name, entities] : _entities) {
+        //         d_cam.at(name).Activate(_camView.at(name));
+        //         for (const auto &[id, entity] : entities) {
+        //             entity->Draw();
+        //         }
+        //     }
+            
+        //     for (const auto &[name, item] : _geometries) {
+        //         d_cam.at(name).Activate(_camView.at(name));
+        //         for (const auto &[id, geo] : item) {
+        //             auto aabb = pangolin::GetAxisAlignedBox(geo);
+        //             totalAABBs[name][id].extend(aabb);
+        //             auto renderable =
+        //                 std::make_shared<GlGeomRenderable>(pangolin::ToGlGeometry(geo), aabb);
+        //             renderables[name][id].push_back(renderable);
+        //             RenderNode::Edge edge = {
+        //                 std::make_shared<SpinTransform>(pangolin::AxisDirection::AxisNone),
+        //                 {renderable, {}}};
+        //             roots[name][id].edges.emplace_back(std::move(edge));
 
-                    if (d_cam.at(name).IsShown()) {
-                        d_cam.at(name).Activate();
+        //             if (d_cam.at(name).IsShown()) {
+        //                 d_cam.at(name).Activate();
 
-                        defProg.Bind();
-                        render_tree(defProg, roots[name][id],
-                                    _camView.at(name).GetProjectionMatrix(),
-                                    _camView.at(name).GetModelViewMatrix(), nullptr);
-                        defProg.Unbind();
+        //                 defProg.Bind();
+        //                 render_tree(defProg, roots[name][id],
+        //                             _camView.at(name).GetProjectionMatrix(),
+        //                             _camView.at(name).GetModelViewMatrix(), nullptr);
+        //                 defProg.Unbind();
 
-                        _camView.at(name).Apply();
-                    }
-                }
-            }
-        }
+        //                 _camView.at(name).Apply();
+        //             }
+        //         }
+        //     }
+        // }
         // -----------
         // end drawing
         // -----------
-
+        //modifiy later_CY
         // Swap frames and Process Events
         pangolin::FinishFrame();
     }
